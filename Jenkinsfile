@@ -1,6 +1,16 @@
 pipeline {
     agent any
 
+    environment {
+        PORT=4000
+        NODE_ENV=production
+        DB_HOST=database-cantt.codkke4a6rba.us-east-1.rds.amazonaws.com
+        DB_PORT=5432
+        DB_NAME=postgres
+        DB_USER=postgres
+        DB_PASSWORD=12345678
+    }
+
     stages {
         stage('Checkout') {
             steps {
