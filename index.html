@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cantt Auto Workshop — Nadeem Butt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #C0392B;
+  --red-dark: #922B21;
+  --red-light: #E74C3C;
+  --black: #0A0A0A;
+  --dark: #111111;
+  --card: #181818;
+  --border: #2a2a2a;
+  --text: #F0EDE8;
+  --muted: #888;
+  --gold: #D4A017;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px;background:rgba(10,10,10,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo .icon{width:36px;height:36px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.nav-logo .icon svg{width:20px;height:20px;fill:white}
+.nav-brand{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--text)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:13px;font-weight:500;letter-spacing:.5px;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--red);color:white;padding:8px 20px;border-radius:4px;font-size:13px;font-weight:500;text-decoration:none;transition:background .2s}
+.nav-cta:hover{background:var(--red-light)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--dark);border-bottom:1px solid var(--border);padding:20px 5%;z-index:99;flex-direction:column;gap:16px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;padding:8px 0;border-bottom:1px solid var(--border)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 5% 60px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 70% 50%, rgba(192,57,43,0.12) 0%, transparent 70%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:60px 60px;opacity:.3}
+.hero-content{position:relative;z-index:1;max-width:600px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.4);color:var(--red-light);font-size:12px;font-weight:500;letter-spacing:1px;padding:6px 14px;border-radius:20px;margin-bottom:28px;text-transform:uppercase}
+.hero-badge span{width:6px;height:6px;background:var(--red-light);border-radius:50%;animation:pulse 1.5s infinite}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,10vw,100px);line-height:.95;letter-spacing:3px;margin-bottom:10px}
+.hero-title .red{color:var(--red)}
+.hero-sub{font-size:clamp(13px,2vw,16px);color:var(--muted);line-height:1.8;margin-bottom:36px;max-width:480px}
+.hero-urdu{font-family:'Noto Nastaliq Urdu',serif;font-size:18px;color:var(--gold);margin-bottom:36px;direction:rtl;line-height:2}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{background:var(--red);color:white;padding:14px 32px;border-radius:5px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
+.btn-primary:hover{background:var(--red-light);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);padding:14px 32px;border-radius:5px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s;border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--red);color:var(--red)}
+.hero-stats{display:flex;gap:40px;margin-top:56px;padding-top:40px;border-top:1px solid var(--border)}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--red);letter-spacing:2px}
+.stat-label{font-size:12px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+.hero-img{position:absolute;right:-2%;top:50%;transform:translateY(-50%);width:48%;max-width:620px;opacity:.85}
+.hero-img svg{width:100%;filter:drop-shadow(0 20px 60px rgba(192,57,43,.3))}
+
+/* ── SECTION COMMON ── */
+section{padding:80px 5%}
+.section-label{font-size:11px;letter-spacing:3px;color:var(--red);text-transform:uppercase;font-weight:500;margin-bottom:12px}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,56px);letter-spacing:2px;line-height:1.05;margin-bottom:16px}
+.section-desc{font-size:15px;color:var(--muted);line-height:1.8;max-width:560px}
+
+/* ── SERVICES ── */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);margin-top:52px}
+.service-card{background:var(--card);padding:32px 28px;transition:all .25s;cursor:default;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.service-card:hover{background:#1e1e1e}
+.service-card:hover::before{transform:scaleX(1)}
+.service-icon{width:48px;height:48px;background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.25);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.service-icon svg{width:24px;height:24px;stroke:var(--red);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.service-name{font-size:16px;font-weight:500;margin-bottom:8px;color:var(--text)}
+.service-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ── WHY US ── */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:52px}
+.why-points{display:flex;flex-direction:column;gap:24px}
+.why-point{display:flex;gap:16px;align-items:flex-start}
+.why-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--red);line-height:1;min-width:36px}
+.why-text h4{font-size:15px;font-weight:500;margin-bottom:4px}
+.why-text p{font-size:13px;color:var(--muted);line-height:1.7}
+.why-visual{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:36px;display:flex;flex-direction:column;gap:16px}
+.review-card{background:var(--black);border:1px solid var(--border);border-radius:8px;padding:18px 20px}
+.review-stars{color:var(--gold);font-size:14px;margin-bottom:8px}
+.review-text{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.review-author{font-size:12px;font-weight:500;color:var(--text)}
+
+/* ── BRANDS ── */
+.brands-section{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 5%}
+.brands-label{font-size:11px;letter-spacing:2px;color:var(--muted);text-align:center;text-transform:uppercase;margin-bottom:28px}
+.brands-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.brand-pill{background:var(--card);border:1px solid var(--border);padding:10px 22px;border-radius:4px;font-size:13px;font-weight:500;color:var(--muted);letter-spacing:.5px;transition:all .2s}
+.brand-pill:hover{border-color:var(--red);color:var(--text)}
+
+/* ── CONTACT ── */
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:52px}
+.contact-info{display:flex;flex-direction:column;gap:28px}
+.contact-item{display:flex;gap:16px;align-items:flex-start}
+.contact-icon{width:42px;height:42px;background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.25);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contact-icon svg{width:20px;height:20px;stroke:var(--red);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.contact-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.contact-val{font-size:15px;color:var(--text);font-weight:500}
+.contact-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.contact-form{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:32px}
+.form-group{margin-bottom:18px}
+.form-group label{font-size:12px;letter-spacing:.5px;color:var(--muted);display:block;margin-bottom:8px;text-transform:uppercase}
+.form-group input,
+.form-group select,
+.form-group textarea{width:100%;background:var(--black);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:5px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{border-color:var(--red)}
+.form-group textarea{resize:vertical;min-height:100px}
+.form-group select option{background:var(--dark)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ── MAP ── */
+.map-section{padding:0 5% 80px}
+.map-frame{border:1px solid var(--border);border-radius:10px;overflow:hidden;height:320px;background:var(--card);display:flex;align-items:center;justify-content:center;margin-top:32px}
+.map-placeholder{text-align:center;color:var(--muted)}
+.map-placeholder svg{width:48px;height:48px;stroke:var(--red);fill:none;stroke-width:1.2;margin-bottom:12px}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);border-top:1px solid var(--border);padding:40px 5% 24px}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:32px;margin-bottom:32px}
+.footer-brand .nav-brand{font-size:22px}
+.footer-brand p{font-size:13px;color:var(--muted);margin-top:8px;max-width:280px;line-height:1.7}
+.footer-links h5{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.footer-links ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:color .2s}
+.footer-links a:hover{color:var(--red)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.footer-bottom p{font-size:12px;color:var(--muted)}
+.footer-bottom a{color:var(--red);text-decoration:none}
+.whatsapp-float{position:fixed;bottom:28px;right:28px;z-index:200;background:#25D366;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;text-decoration:none}
+.whatsapp-float:hover{transform:scale(1.1)}
+.whatsapp-float svg{width:28px;height:28px;fill:white}
+
+/* ── ANIMATIONS ── */
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;animation:fadeUp .7s ease forwards}
+.fade-up:nth-child(1){animation-delay:.1s}
+.fade-up:nth-child(2){animation-delay:.2s}
+.fade-up:nth-child(3){animation-delay:.3s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .hero-img{display:none}
+  .hero-content{max-width:100%}
+  .why-grid,.contact-wrap{grid-template-columns:1fr}
+  .hero-stats{gap:24px}
+  .form-row{grid-template-columns:1fr}
+  .footer-top{flex-direction:column}
+}
+@media(max-width:480px){
+  .hero-stats{flex-wrap:wrap;gap:20px}
+  section{padding:60px 5%}
+}
+</style>
+</head>
+<body>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/923001234567" class="whatsapp-float" target="_blank" aria-label="WhatsApp pe message karo">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="icon">
+      <svg viewBox="0 0 24 24"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17H3v-6l2-5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0H9M3 9h4"/></svg>
+    </div>
+    <span class="nav-brand">CANTT AUTO</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#why-us">Why Us</a></li>
+    <li><a href="#brands">Brands</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Book Appointment</a>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#why-us" onclick="toggleMenu()">Why Us</a>
+  <a href="#brands" onclick="toggleMenu()">Brands</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+  <a href="tel:+923001234567" style="color:var(--red)">Call Now: 0300-1234567</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span></span>Cantt, Lahore — Since 1995</div>
+    <h1 class="hero-title fade-up">CANTT<br><span class="red">AUTO</span><br>WORKSHOP</h1>
+    <p class="hero-urdu fade-up">آپ کی گاڑی، ہماری ذمہ داری</p>
+    <p class="hero-sub fade-up">Nadeem Butt ki taraf se — Lahore Cantt ki sab se trusted car workshop. Expert mechanics, genuine parts, guaranteed work.</p>
+    <div class="hero-btns fade-up">
+      <a href="#contact" class="btn-primary">Book Appointment</a>
+      <a href="tel:+923001234567" class="btn-outline">Call: 0300-1234567</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">28+</div><div class="stat-label">Years Experience</div></div>
+      <div><div class="stat-num">5K+</div><div class="stat-label">Happy Customers</div></div>
+      <div><div class="stat-num">15+</div><div class="stat-label">Expert Mechanics</div></div>
+    </div>
+  </div>
+  <div class="hero-img">
+    <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+      <g opacity=".9">
+        <rect x="60" y="160" width="480" height="80" rx="8" fill="#1a1a1a" stroke="#C0392B" stroke-width="1.5"/>
+        <path d="M120 160 L180 90 L420 90 L480 160" fill="#222" stroke="#C0392B" stroke-width="1.5"/>
+        <rect x="130" y="100" width="100" height="58" rx="4" fill="#0d0d0d" stroke="#333" stroke-width="1"/>
+        <rect x="240" y="100" width="120" height="58" rx="4" fill="#0d0d0d" stroke="#333" stroke-width="1"/>
+        <rect x="370" y="100" width="100" height="58" rx="4" fill="#0d0d0d" stroke="#333" stroke-width="1"/>
+        <circle cx="160" cy="240" r="40" fill="#111" stroke="#C0392B" stroke-width="3"/>
+        <circle cx="160" cy="240" r="24" fill="#1a1a1a" stroke="#444" stroke-width="2"/>
+        <circle cx="160" cy="240" r="8" fill="#C0392B"/>
+        <circle cx="440" cy="240" r="40" fill="#111" stroke="#C0392B" stroke-width="3"/>
+        <circle cx="440" cy="240" r="24" fill="#1a1a1a" stroke="#444" stroke-width="2"/>
+        <circle cx="440" cy="240" r="8" fill="#C0392B"/>
+        <rect x="70" y="175" width="460" height="12" rx="3" fill="#C0392B" opacity=".15"/>
+        <rect x="60" y="195" width="30" height="20" rx="3" fill="#D4A017" opacity=".8"/>
+        <rect x="510" y="195" width="30" height="20" rx="3" fill="#D4A017" opacity=".3"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- BRANDS -->
+<div class="brands-section">
+  <p class="brands-label">In brands ki cars ka kaam karte hain</p>
+  <div class="brands-row">
+    <div class="brand-pill">Toyota</div>
+    <div class="brand-pill">Honda</div>
+    <div class="brand-pill">Suzuki</div>
+    <div class="brand-pill">Kia</div>
+    <div class="brand-pill">Hyundai</div>
+    <div class="brand-pill">Changan</div>
+    <div class="brand-pill">MG</div>
+    <div class="brand-pill">Mitsubishi</div>
+    <div class="brand-pill">Nissan</div>
+    <div class="brand-pill">Daihatsu</div>
+    <div class="brand-pill">BMW</div>
+    <div class="brand-pill">Mercedes</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <p class="section-label">Hamaari Services</p>
+  <h2 class="section-title">TAMAM CAR SERVICES<br>EK JAGAH</h2>
+  <p class="section-desc">Engine se le kar AC tak — sab kaam yahan hota hai. Genuine parts, expert hands.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      </div>
+      <div class="service-name">Engine Repair & Overhaul</div>
+      <div class="service-desc">Engine ki complete diagnosis, timing belt, pistons, gasket replacement. OBD scanner se fault codes check karte hain.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M9 12H3"/></svg>
+      </div>
+      <div class="service-name">AC Service & Repair</div>
+      <div class="service-desc">Gas refilling, compressor repair, condenser cleaning, blower motor replacement. Garmi mein thandi hawa guaranteed.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="service-name">Brake System</div>
+      <div class="service-desc">Brake pads, discs, drums replacement. Brake fluid change, ABS system check, handbrake adjustment.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div class="service-name">Oil & Filter Change</div>
+      <div class="service-desc">Engine oil, gear oil, differential oil change. Genuine oil filters, air filters, cabin filters available.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      </div>
+      <div class="service-name">Suspension & Steering</div>
+      <div class="service-desc">Shock absorbers, control arms, ball joints, tie rods, rack & pinion steering repair. Smooth ride guaranteed.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      </div>
+      <div class="service-name">Electrical & Electronics</div>
+      <div class="service-desc">Battery replacement, alternator, starter motor, wiring, sensors, car computer programming.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      </div>
+      <div class="service-name">Body Work & Denting</div>
+      <div class="service-desc">Denting painting, rust removal, bumper repair, complete car body restoration. Original color matching.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-6a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+      </div>
+      <div class="service-name">Tyre & Wheel</div>
+      <div class="service-desc">Tyre change, wheel balancing, alignment, puncture repair, rim straightening. All tyre brands available.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      </div>
+      <div class="service-name">Complete Car Inspection</div>
+      <div class="service-desc">Used car kharidne se pehle complete 100-point inspection. Detailed report ke saath koi hidden problem nahi chupega.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why-us" style="background:var(--dark)">
+  <p class="section-label">Kyon Aayein Hamare Paas</p>
+  <h2 class="section-title">NADEEM BUTT KI<br><span style="color:var(--red)">GUARANTEE</span></h2>
+  <div class="why-grid">
+    <div class="why-points">
+      <div class="why-point">
+        <div class="why-num">01</div>
+        <div class="why-text">
+          <h4>28 Saal ka Tajurba</h4>
+          <p>1995 se Lahore Cantt mein kaam kar rahe hain. Hazaron cars theek kar chuke hain — experience jhooth nahi bolta.</p>
+        </div>
+      </div>
+      <div class="why-point">
+        <div class="why-num">02</div>
+        <div class="why-text">
+          <h4>Genuine Parts Only</h4>
+          <p>Sirf original ya certified parts use karte hain. Sasta kaam nahi — reliable kaam. Parts ki receipt di jaati hai.</p>
+        </div>
+      </div>
+      <div class="why-point">
+        <div class="why-num">03</div>
+        <div class="why-text">
+          <h4>Transparent Pricing</h4>
+          <p>Kaam shuru hone se pehle complete estimate dete hain. Koi hidden charges nahi. Jo bola wo hi liya jaata hai.</p>
+        </div>
+      </div>
+      <div class="why-point">
+        <div class="why-num">04</div>
+        <div class="why-text">
+          <h4>Time pe Delivery</h4>
+          <p>Jo time diya, us waqt car ready. Emergency cases mein same day service bhi available hai.</p>
+        </div>
+      </div>
+    </div>
+    <div class="why-visual">
+      <p style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Customer Reviews</p>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Bhai Nadeem ne meri Corolla ka engine issue ek din mein theek kar diya. Price bilkul fair tha aur parts genuine thay. Highly recommend!"</p>
+        <div class="review-author">— Asif Mahmood, DHA Lahore</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Honda Civic ki AC band ho gayi thi. Inke paas gaya, 2 ghantay mein theek. Ab bilkul thandi hai. Bohot acha kaam kiya."</p>
+        <div class="review-author">— Sana Khalid, Cantt Lahore</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"Used car khareedne se pehle inspection karaai. Detailed report mili, ek chupa hua issue pakra gaya. Paisa bachaya!"</p>
+        <div class="review-author">— Usman Raza, Gulberg</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Appointment / Contact</p>
+  <h2 class="section-title">AAYEIN YA<br><span style="color:var(--red)">CALL KAREIN</span></h2>
+  <p class="section-desc">Workshop visit karein ya online appointment book karein — Nadeem Butt khud mile ga.</p>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Address</div>
+          <div class="contact-val">Cantt Auto Workshop</div>
+          <div class="contact-sub">Near Cantt Railway Station, Lahore Cantt</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 5.82 5.82l1.06-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Phone / WhatsApp</div>
+          <div class="contact-val">0300-1234567</div>
+          <div class="contact-sub">0321-9876543 (WhatsApp)</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Workshop Hours</div>
+          <div class="contact-val">8:00 AM — 8:00 PM</div>
+          <div class="contact-sub">Monday to Saturday • Sunday: 9 AM – 2 PM</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-val">canttauto@gmail.com</div>
+          <div class="contact-sub">Reply within 2-3 hours</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <h3 style="font-size:18px;font-weight:500;margin-bottom:22px">Appointment Book Karo</h3>
+      <form id="appointmentForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Aap ka Naam</label>
+          <input type="text" id="name" placeholder="Muhammad Ali" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="0300-0000000" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Gaadi ka Model</label>
+        <input type="text" id="carModel" placeholder="Toyota Corolla 2019" required>
+      </div>
+      <div class="form-group">
+        <label>Service Type</label>
+        <select id="serviceType" required>
+          <option value="">Service choose karein</option>
+          <option>Engine Repair / Overhaul</option>
+          <option>AC Service & Repair</option>
+          <option>Brake System</option>
+          <option>Oil & Filter Change</option>
+          <option>Suspension & Steering</option>
+          <option>Electrical & Electronics</option>
+          <option>Body Work & Denting</option>
+          <option>Tyre & Wheel</option>
+          <option>Complete Inspection</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Problem ya Message</label>
+        <textarea id="message" placeholder="Gaadi ki problem describe karein..."></textarea>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;font-size:14px">Appointment Book Karo</button>
+      </form>
+      <p id="formStatus" style="font-size:12px;color:var(--muted);margin-top:12px;text-align:center"></p>
+      <p style="font-size:11px;color:var(--muted);margin-top:12px;text-align:center">Ya seedha WhatsApp karein: 0321-9876543</p>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<div class="map-section">
+  <p class="section-label">Hamaari Location</p>
+  <h2 class="section-title" style="font-size:clamp(28px,4vw,42px)">CANTT, LAHORE</h2>
+  <div class="map-frame">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3401.4!2d74.3587!3d31.5204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzHCsDMxJzEzLjQiTiA3NMKwMjEnMzEuMyJF!5e0!3m2!1sen!2spk!4v1234567890"
+      width="100%" height="100%" style="border:0" allowfullscreen="" loading="lazy">
+    </iframe>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:12px">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:white"><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 17H3v-6l2-5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0H9M3 9h4"/></svg>
+        </div>
+        <span class="nav-brand">CANTT AUTO WORKSHOP</span>
+      </div>
+      <p>Nadeem Butt — 1995 se aap ki gaadi ki seva mein. Lahore Cantt ka most trusted workshop.</p>
+    </div>
+    <div class="footer-links">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#services">Engine Repair</a></li>
+        <li><a href="#services">AC Service</a></li>
+        <li><a href="#services">Brake System</a></li>
+        <li><a href="#services">Suspension</a></li>
+        <li><a href="#services">Body Work</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="#why-us">Why Us</a></li>
+        <li><a href="#brands">Brands We Service</a></li>
+        <li><a href="#contact">Book Appointment</a></li>
+        <li><a href="tel:+923001234567">Call Now</a></li>
+        <li><a href="https://wa.me/923001234567">WhatsApp</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 Cantt Auto Workshop — Nadeem Butt. All rights reserved.</p>
+    <p>Made with care for <a href="#contact">Lahore Cantt</a></p>
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+const API_BASE_URL = "http://98.80.200.110";
+const appointmentForm = document.getElementById("appointmentForm");
+const formStatus = document.getElementById("formStatus");
+
+appointmentForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    customer_name: document.getElementById("name").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    car_model: document.getElementById("carModel").value.trim(),
+    service_type: document.getElementById("serviceType").value,
+    message: document.getElementById("message").value.trim()
+  };
+
+  formStatus.style.color = "var(--muted)";
+  formStatus.textContent = "Appointment send ho rahi hai...";
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/appointments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || "Request failed");
+    }
+
+    appointmentForm.reset();
+    formStatus.style.color = "#25D366";
+    formStatus.textContent = "Shukriya! Appointment save ho gayi. Team jald rabta karegi.";
+  } catch (error) {
+    formStatus.style.color = "var(--red-light)";
+    formStatus.textContent = `Error: ${error.message}. Ya seedha call karein 0300-1234567`;
+  }
+});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+</script>
+</body>
+</html>

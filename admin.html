@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cantt Auto Admin Panel</title>
+  <style>
+    :root {
+      --bg: #0f0f10;
+      --card: #1a1a1c;
+      --muted: #9ca3af;
+      --text: #f3f4f6;
+      --red: #c0392b;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --blue: #3b82f6;
+      --border: #2e2f33;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      padding: 24px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    h1 { font-size: 26px; }
+    .muted { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .toolbar {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    input, select, button {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    button {
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover { opacity: 0.9; }
+    .btn-red { background: var(--red); border-color: var(--red); color: #fff; }
+    .btn-blue { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .status-line {
+      margin: 8px 0 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .table-wrap {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--card);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      font-size: 13px;
+    }
+    th {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    tr:hover { background: #212126; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid transparent;
+    }
+    .chip.new { background: rgba(59, 130, 246, 0.15); border-color: var(--blue); color: #93c5fd; }
+    .chip.in-progress { background: rgba(234, 179, 8, 0.15); border-color: var(--yellow); color: #facc15; }
+    .chip.done { background: rgba(34, 197, 94, 0.15); border-color: var(--green); color: #86efac; }
+    .actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .tiny-btn {
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 6px;
+    }
+    .danger {
+      background: rgba(192, 57, 43, 0.15);
+      border-color: var(--red);
+      color: #fda4a4;
+    }
+    .empty {
+      padding: 24px;
+      text-align: center;
+      color: var(--muted);
+    }
+    @media (max-width: 960px) {
+      .toolbar { grid-template-columns: 1fr; }
+      th:nth-child(6), td:nth-child(6),
+      th:nth-child(7), td:nth-child(7) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>Cantt Auto Admin Panel</h1>
+        <p class="muted">Appointments manage karein (view, filter, status update, delete)</p>
+      </div>
+      <button class="btn-blue" id="refreshBtn">Refresh</button>
+    </div>
+
+    <div class="toolbar">
+      <input id="searchInput" placeholder="Search: naam, phone, model, service..." />
+      <select id="statusFilter">
+        <option value="all">All Status</option>
+        <option value="new">New</option>
+        <option value="in-progress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+      <select id="sortBy">
+        <option value="latest">Latest First</option>
+        <option value="oldest">Oldest First</option>
+      </select>
+      <button id="exportBtn">Export JSON</button>
+    </div>
+
+    <p class="status-line" id="statusLine">Loading appointments...</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Phone</th>
+            <th>Car Model</th>
+            <th>Service</th>
+            <th>Message</th>
+            <th>Created</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="appointmentsBody"></tbody>
+      </table>
+      <div class="empty" id="emptyState" style="display:none;">No appointments found.</div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = "http://98.80.200.110";
+    let allAppointments = [];
+
+    const appointmentsBody = document.getElementById("appointmentsBody");
+    const emptyState = document.getElementById("emptyState");
+    const statusLine = document.getElementById("statusLine");
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const sortBy = document.getElementById("sortBy");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const exportBtn = document.getElementById("exportBtn");
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function statusChip(status) {
+      const safe = (status || "new").toLowerCase();
+      const label = safe === "in-progress" ? "In Progress" : safe.charAt(0).toUpperCase() + safe.slice(1);
+      return `<span class="chip ${safe}">${escapeHtml(label)}</span>`;
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      if (Number.isNaN(date.getTime())) return "-";
+      return date.toLocaleString();
+    }
+
+    function getFilteredAppointments() {
+      const query = searchInput.value.trim().toLowerCase();
+      const selectedStatus = statusFilter.value;
+      const sortValue = sortBy.value;
+
+      let filtered = allAppointments.filter((item) => {
+        const statusMatch = selectedStatus === "all" || (item.status || "new") === selectedStatus;
+        if (!statusMatch) return false;
+        if (!query) return true;
+
+        const haystack = [
+          item.customer_name,
+          item.phone,
+          item.car_model,
+          item.service_type,
+          item.message
+        ].join(" ").toLowerCase();
+
+        return haystack.includes(query);
+      });
+
+      filtered.sort((a, b) => {
+        const at = new Date(a.created_at).getTime();
+        const bt = new Date(b.created_at).getTime();
+        return sortValue === "oldest" ? at - bt : bt - at;
+      });
+
+      return filtered;
+    }
+
+    function renderTable() {
+      const rows = getFilteredAppointments();
+      appointmentsBody.innerHTML = "";
+
+      if (!rows.length) {
+        emptyState.style.display = "block";
+        statusLine.textContent = "No matching appointments.";
+        return;
+      }
+
+      emptyState.style.display = "none";
+      statusLine.textContent = `${rows.length} appointment(s) shown • Total: ${allAppointments.length}`;
+
+      appointmentsBody.innerHTML = rows.map((item) => `
+        <tr>
+          <td>#${item.id}</td>
+          <td>${escapeHtml(item.customer_name)}</td>
+          <td>${escapeHtml(item.phone)}</td>
+          <td>${escapeHtml(item.car_model)}</td>
+          <td>${escapeHtml(item.service_type)}</td>
+          <td>${escapeHtml(item.message || "-")}</td>
+          <td>${escapeHtml(formatDate(item.created_at))}</td>
+          <td>${statusChip(item.status)}</td>
+          <td>
+            <div class="actions">
+              <button class="tiny-btn" onclick="updateStatus(${item.id}, 'new')">New</button>
+              <button class="tiny-btn" onclick="updateStatus(${item.id}, 'in-progress')">In Progress</button>
+              <button class="tiny-btn" onclick="updateStatus(${item.id}, 'done')">Done</button>
+              <button class="tiny-btn danger" onclick="deleteAppointment(${item.id})">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    async function fetchAppointments() {
+      statusLine.textContent = "Loading appointments...";
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/appointments`);
+        if (!res.ok) throw new Error("Could not load data");
+        allAppointments = await res.json();
+        renderTable();
+      } catch (err) {
+        statusLine.textContent = `Error: ${err.message}. Backend chal raha ho to refresh karein.`;
+        allAppointments = [];
+        renderTable();
+      }
+    }
+
+    async function updateStatus(id, status) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/appointments/${id}/status`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status })
+        });
+        if (!res.ok) throw new Error("Status update failed");
+        await fetchAppointments();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    async function deleteAppointment(id) {
+      const ok = confirm("Is appointment ko delete karna hai?");
+      if (!ok) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/appointments/${id}`, {
+          method: "DELETE"
+        });
+        if (!res.ok) throw new Error("Delete failed");
+        await fetchAppointments();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    function exportJson() {
+      const blob = new Blob([JSON.stringify(getFilteredAppointments(), null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "appointments-export.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    window.updateStatus = updateStatus;
+    window.deleteAppointment = deleteAppointment;
+
+    searchInput.addEventListener("input", renderTable);
+    statusFilter.addEventListener("change", renderTable);
+    sortBy.addEventListener("change", renderTable);
+    refreshBtn.addEventListener("click", fetchAppointments);
+    exportBtn.addEventListener("click", exportJson);
+
+    fetchAppointments();
+  </script>
+</body>
+</html>

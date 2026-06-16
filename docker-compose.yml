@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  backend:
+    build: ./cantt-auto-backend
+    ports:
+      - "4001:4000"
+    env_file:
+      - ./cantt-auto-backend/.env
+    restart: always
