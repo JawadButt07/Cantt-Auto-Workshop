@@ -33,6 +33,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
+                sh 'docker ps -q --filter name=cantt-auto-workshop-project-backend-1 | xargs -r docker stop | xargs -r docker rm || true'
                 sh 'docker compose up -d --force-recreate'
             }
         }
